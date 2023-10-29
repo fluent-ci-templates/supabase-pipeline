@@ -34,7 +34,7 @@ export function generateYaml(): AzurePipeline {
       displayName: "Setup Dagger",
     })
     .step({
-      script: "fluentci run firebase_pipeline deploy",
+      script: "fluentci run supabase_pipeline deploy",
       displayName: "Run Dagger Pipelines",
     });
   return azurePipeline;

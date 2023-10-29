@@ -21,7 +21,7 @@ export function generateYaml(): Workflow {
       {
         uses: "denoland/setup-deno@v1",
         with: {
-          "deno-version": "v1.36",
+          "deno-version": "v1.37",
         },
       },
       {
@@ -34,9 +34,10 @@ export function generateYaml(): Workflow {
       },
       {
         name: "Run Dagger Pipelines",
-        run: "fluentci run firebase_pipeline deploy",
+        run: "fluentci run supabase_pipeline deploy",
         env: {
-          FIREBASE_TOKEN: "${{ secrets.FIREBASE_TOKEN }}",
+          SUPABASE_ACCESS_TOKEN: "${{ secrets.SUPABASE_ACCESS_TOKEN }}",
+          PROJECT_ID: "${{ secrets.PROJECT_ID }}",
         },
       },
     ],

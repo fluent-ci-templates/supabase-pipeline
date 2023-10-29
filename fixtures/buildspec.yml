@@ -13,7 +13,7 @@ phases:
       - dagger version
   build:
     commands:
-      - fluentci run firebase_pipeline deploy
+      - fluentci run supabase_pipeline deploy
   post_build:
     commands:
       - echo Build completed on `date`

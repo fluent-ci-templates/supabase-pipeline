@@ -1,6 +1,6 @@
 # Azure Pipelines
 
-[![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fbase_pipeline&query=%24.version)](https://pkg.fluentci.io/base_pipeline)
+[![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fsupabase_pipeline&query=%24.version)](https://pkg.fluentci.io/supabase_pipeline)
 ![deno compatibility](https://shield.deno.dev/deno/^1.34)
 
 The following command will generate a `azure-pipelines.yml` file in your project:
@@ -32,7 +32,7 @@ steps:
         sudo mv bin/dagger /usr/local/bin
         dagger version
     displayName: Setup Dagger
-  - script: fluentci run .
+  - script: fluentci run supabase_pipeline deploy
     displayName: Run Dagger Pipelines
 
 ```

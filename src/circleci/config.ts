@@ -26,7 +26,7 @@ dagger version`,
     {
       run: {
         name: "Run Dagger Pipelines",
-        command: "fluentci run firebase_pipeline deploy",
+        command: "fluentci run supabase_pipeline deploy",
       },
     },
   ]);
