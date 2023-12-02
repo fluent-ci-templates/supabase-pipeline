@@ -12,7 +12,11 @@ export default async function pipeline(src = ".", args: string[] = []) {
     return;
   }
 
-  await deploy(src);
+  await deploy(
+    src,
+    Deno.env.get("SUPABASE_ACCESS_TOKEN")!,
+    Deno.env.get("PROJECT_ID")!
+  );
 }
 
 async function runSpecificJobs(args: jobs.Job[]) {
@@ -21,6 +25,10 @@ async function runSpecificJobs(args: jobs.Job[]) {
     if (!job) {
       throw new Error(`Job ${name} not found`);
     }
-    await job();
+    await job(
+      ".",
+      Deno.env.get("SUPABASE_ACCESS_TOKEN")!,
+      Deno.env.get("PROJECT_ID")!
+    );
   }
 }

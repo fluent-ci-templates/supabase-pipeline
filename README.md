@@ -43,5 +43,10 @@ You can also use this pipeline programmatically:
 ```typescript
 import { deploy } from "https://pkg.fluentci.io/supabase_pipeline@v0.3.0/mod.ts";
 
-await deploy();
+await deploy(
+    ".", 
+    Deno.env.get("SUPABASE_ACCESS_TOKEN")!, 
+    Deno.env.get("PROJECT_ID")!
+);
+
 ```
