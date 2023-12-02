@@ -28,13 +28,12 @@ fluentci run supabase_pipeline
 |-------------|------------------------------------------------------------|
 | deploy      | Deploy functions to Supabase Edge Functions                |
 
-```graphql
-
+```typescript
 deploy(
-    src: String!, 
-    token: String!,
-    projectId: String!
-): String
+  src: Directory | string,
+  token: Secret | string,
+  projectId: string
+): Promise<string>
 ```
 
 ## Programmatic usage
