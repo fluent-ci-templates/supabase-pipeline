@@ -24,6 +24,7 @@ export async function deploy(
   token: Secret | string,
   projectId: string
 ): Promise<string> {
+  let result = "";
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const secret = getSupabaseToken(client, token);
@@ -37,6 +38,10 @@ export async function deploy(
       .pipeline(Job.deploy)
       .container()
       .from("pkgxdev/pkgx:latest")
+      .withUnixSocket(
+        "/var/run/docker.sock",
+        client.host().unixSocket("/var/run/docker.sock")
+      )
       .withExec(["apt-get", "update"])
       .withExec(["apt-get", "install", "-y", "ca-certificates"])
       .withExec([
@@ -44,7 +49,7 @@ export async function deploy(
         "install",
         `node@${NODE_VERSION}`,
         `bun@${BUN_VERSION}`,
-        "supabase",
+        "supabase@1.115.1",
       ])
       .withEnvVariable("PATH", "/root/.bun/bin:$PATH", { expand: true })
       .withDirectory("/app", context)
@@ -58,10 +63,10 @@ export async function deploy(
         Deno.env.get("PROJECT_ID") || projectId!,
       ]);
 
-    await ctr.stdout();
+    result = await ctr.stdout();
   });
 
-  return "Done";
+  return result;
 }
 
 export type JobExec = (
