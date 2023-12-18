@@ -24,6 +24,7 @@ export async function deploy(
   token: Secret | string,
   projectId: string
 ): Promise<string> {
+  let result = "";
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const secret = getSupabaseToken(client, token);
@@ -58,10 +59,10 @@ export async function deploy(
         Deno.env.get("PROJECT_ID") || projectId!,
       ]);
 
-    await ctr.stdout();
+    result = await ctr.stdout();
   });
 
-  return "Done";
+  return result;
 }
 
 export type JobExec = (

@@ -15,7 +15,7 @@ const BUN_VERSION = Deno.env.get("BUN_VERSION") || "1.0.3";
  * @function
  * @description Deploy to Supabase Edge Functions
  * @param {Directory | string} src The directory to deploy
- * @param {Secret | string} tokenThe Supabase access token
+ * @param {Secret | string} token Supabase access token
  * @param {string} projectId The Supabase project ID
  * @returns {Promise<string>}
  */
@@ -24,6 +24,7 @@ export async function deploy(
   token: Secret | string,
   projectId: string
 ): Promise<string> {
+  let result = "";
   await connect(async (client: Client) => {
     const context = getDirectory(client, src);
     const secret = getSupabaseToken(client, token);
@@ -58,10 +59,10 @@ export async function deploy(
         Deno.env.get("PROJECT_ID") || projectId!,
       ]);
 
-    await ctr.stdout();
+    result = await ctr.stdout();
   });
 
-  return "Done";
+  return result;
 }
 
 export type JobExec = (
