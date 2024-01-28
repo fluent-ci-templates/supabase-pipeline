@@ -1,5 +1,4 @@
-import Client, { Directory, Secret } from "../../deps.ts";
-import { connect } from "../../sdk/connect.ts";
+import { Directory, Secret, dag } from "../../deps.ts";
 import { getDirectory, getSupabaseToken } from "./lib.ts";
 
 export enum Job {
@@ -9,7 +8,7 @@ export enum Job {
 export const exclude = ["node_modules"];
 
 const NODE_VERSION = Deno.env.get("NODE_VERSION") || "18.16.1";
-const BUN_VERSION = Deno.env.get("BUN_VERSION") || "1.0.3";
+const BUN_VERSION = Deno.env.get("BUN_VERSION") || "1.0.25";
 
 /**
  * @function
@@ -24,48 +23,44 @@ export async function deploy(
   token: Secret | string,
   projectId: string
 ): Promise<string> {
-  let result = "";
-  await connect(async (client: Client) => {
-    const context = getDirectory(client, src);
-    const secret = getSupabaseToken(client, token);
+  const context = await getDirectory(dag, src);
+  const secret = await getSupabaseToken(dag, token);
 
-    if (!secret) {
-      console.log("No Supabase token found");
-      Deno.exit(1);
-    }
+  if (!secret) {
+    console.log("No Supabase token found");
+    Deno.exit(1);
+  }
 
-    const ctr = client
-      .pipeline(Job.deploy)
-      .container()
-      .from("pkgxdev/pkgx:latest")
-      .withUnixSocket(
-        "/var/run/docker.sock",
-        client.host().unixSocket("/var/run/docker.sock")
-      )
-      .withExec(["apt-get", "update"])
-      .withExec(["apt-get", "install", "-y", "ca-certificates"])
-      .withExec([
-        "pkgx",
-        "install",
-        `node@${NODE_VERSION}`,
-        `bun@${BUN_VERSION}`,
-        "supabase@1.115.1",
-      ])
-      .withEnvVariable("PATH", "/root/.bun/bin:$PATH", { expand: true })
-      .withDirectory("/app", context)
-      .withWorkdir("/app")
-      .withSecretVariable("SUPABASE_ACCESS_TOKEN", secret)
-      .withExec([
-        "supabase",
-        "functions",
-        "deploy",
-        "--project-ref",
-        Deno.env.get("PROJECT_ID") || projectId!,
-      ]);
+  const ctr = dag
+    .pipeline(Job.deploy)
+    .container()
+    .from("pkgxdev/pkgx:latest")
+    .withUnixSocket(
+      "/var/run/docker.sock",
+      dag.host().unixSocket("/var/run/docker.sock")
+    )
+    .withExec(["apt-get", "update"])
+    .withExec(["apt-get", "install", "-y", "ca-certificates"])
+    .withExec([
+      "pkgx",
+      "install",
+      `node@${NODE_VERSION}`,
+      `bun@${BUN_VERSION}`,
+      "supabase@1.115.1",
+    ])
+    .withEnvVariable("PATH", "/root/.bun/bin:$PATH", { expand: true })
+    .withDirectory("/app", context)
+    .withWorkdir("/app")
+    .withSecretVariable("SUPABASE_ACCESS_TOKEN", secret)
+    .withExec([
+      "supabase",
+      "functions",
+      "deploy",
+      "--project-ref",
+      Deno.env.get("PROJECT_ID") || projectId!,
+    ]);
 
-    result = await ctr.stdout();
-  });
-
+  const result = await ctr.stdout();
   return result;
 }
 
