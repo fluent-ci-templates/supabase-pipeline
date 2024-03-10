@@ -28,7 +28,7 @@ dagger install github.com/fluent-ci-templates/supabase-pipeline@main
 Call a function from the module:
 
 ```bash
-dagger call -m github.com/fluent-ci-templates/supabase-pipeline@main \
+dagger -m github.com/fluent-ci-templates/supabase-pipeline@main call \
   deploy --src . \
   --token env:SUPABASE_ACCESS_TOKEN \
   --projectId $PROJECT_ID
