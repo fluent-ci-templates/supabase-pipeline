@@ -42,10 +42,6 @@ export async function deploy(
     .pipeline(Job.deploy)
     .container()
     .from("pkgxdev/pkgx:latest")
-    .withUnixSocket(
-      "/var/run/docker.sock",
-      dag.host().unixSocket("/var/run/docker.sock")
-    )
     .withExec(["apt-get", "update"])
     .withExec(["apt-get", "install", "-y", "ca-certificates"])
     .withExec([

@@ -17,7 +17,8 @@ jobs:
           sudo mv bin/dagger /usr/local/bin
           dagger version
       - name: Run Dagger Pipelines
-        run: dagger call deploy --src . \
+        run: |
+          dagger call deploy --src . \
           --token env:SUPABASE_ACCESS_TOKEN \
           --project-id xovhyzmcpinxtqirtjdp
         working-directory: example

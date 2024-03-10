@@ -12,8 +12,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup Fluent CI
         uses: fluentci-io/setup-fluentci@v4
-      - name: List Jobs
-        run: fluentci ls .
       - name: Run Dagger Pipelines
         run: |
           fluentci run deno_pipeline fmt test
