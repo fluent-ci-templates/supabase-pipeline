@@ -1,9 +1,0 @@
-{
-  supabase {
-    deploy(
-      src: "."
-      token: "SUPABASE_ACCESS_TOKEN"
-      projectId: "xovhyzmcpinxtqirtjdp"
-    )
-  }
-}

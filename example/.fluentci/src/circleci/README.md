@@ -1,6 +1,6 @@
 # Circle CI
 
-[![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fbase_pipeline&query=%24.version)](https://pkg.fluentci.io/base_pipeline)
+[![fluentci pipeline](https://img.shields.io/badge/dynamic/json?label=pkg.fluentci.io&labelColor=%23000&color=%23460cf1&url=https%3A%2F%2Fapi.fluentci.io%2Fv1%2Fpipeline%2Fsupabase_pipeline&query=%24.version)](https://pkg.fluentci.io/supabase_pipeline)
 ![deno compatibility](https://shield.deno.dev/deno/^1.34)
 
 
@@ -32,7 +32,7 @@ jobs:
           dagger version
       - run:
           name: Run Dagger Pipelines
-          command: fluentci run .
+          command: fluentci run supabase_pipeline deploy
     machine:
       image: ubuntu-2004:2023.07.1
 workflows:

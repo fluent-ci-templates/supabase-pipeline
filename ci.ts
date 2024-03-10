@@ -1,3 +1,3 @@
-import { deploy } from "https://pkg.fluentci.io/supabase_pipeline@v0.4.2/mod.ts";
+import { deploy } from "jsr:@fluentci/supabase";
 
 await deploy();

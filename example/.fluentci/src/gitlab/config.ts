@@ -17,7 +17,7 @@ export function generateYaml(): GitlabCI {
     `
     apk add docker-cli curl unzip
     deno install -A -r https://cli.fluentci.io -n fluentci
-    curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.8.1 sh
+    curl -L https://dl.dagger.io/dagger/install.sh | DAGGER_VERSION=0.9.3 sh
     mv bin/dagger /usr/local/bin
     dagger version
     `
@@ -25,7 +25,7 @@ export function generateYaml(): GitlabCI {
 
   const deploy = new Job()
     .extends(".dagger")
-    .script("fluentci run firebase_pipeline deploy");
+    .script("fluentci run supabase_pipeline deploy");
 
   return new GitlabCI()
     .addJob(".docker", docker)

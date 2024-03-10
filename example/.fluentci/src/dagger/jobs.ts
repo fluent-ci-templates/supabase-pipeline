@@ -1,4 +1,8 @@
-import { Directory, Secret, dag } from "../../deps.ts";
+/**
+ * @module supabase
+ * @description Deploy to Supabase Edge Functions
+ */
+import { Directory, Secret, dag, env, exit } from "../../deps.ts";
 import { getDirectory, getSupabaseToken } from "./lib.ts";
 
 export enum Job {
@@ -7,10 +11,12 @@ export enum Job {
 
 export const exclude = ["node_modules"];
 
-const NODE_VERSION = Deno.env.get("NODE_VERSION") || "18.16.1";
-const BUN_VERSION = Deno.env.get("BUN_VERSION") || "1.0.25";
+const NODE_VERSION = env.get("NODE_VERSION") || "18.16.1";
+const BUN_VERSION = env.get("BUN_VERSION") || "1.0.30";
 
 /**
+ * Deploy to Supabase Edge Functions
+ *
  * @function
  * @description Deploy to Supabase Edge Functions
  * @param {Directory | string} src The directory to deploy
@@ -23,12 +29,13 @@ export async function deploy(
   token: Secret | string,
   projectId: string
 ): Promise<string> {
-  const context = await getDirectory(dag, src);
-  const secret = await getSupabaseToken(dag, token);
+  const context = await getDirectory(src);
+  const secret = await getSupabaseToken(token);
 
   if (!secret) {
     console.log("No Supabase token found");
-    Deno.exit(1);
+    exit(1);
+    return "";
   }
 
   const ctr = dag
@@ -57,11 +64,10 @@ export async function deploy(
       "functions",
       "deploy",
       "--project-ref",
-      Deno.env.get("PROJECT_ID") || projectId!,
+      env.get("PROJECT_ID") || projectId!,
     ]);
 
-  const result = await ctr.stdout();
-  return result;
+  return ctr.stdout();
 }
 
 export type JobExec = (
