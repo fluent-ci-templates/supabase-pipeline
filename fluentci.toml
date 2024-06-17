@@ -1,0 +1,8 @@
+[package]
+authors = [
+  "Tsiry Sandratraina <tsiry.sndr@fluentci.io>",
+]
+description = "CI/CD Plugin for Supabase"
+license = "MIT"
+name = "supabase"
+version = "0.6.0"
